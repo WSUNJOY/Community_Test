@@ -1,0 +1,8 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+
+*** Test Cases ***
+1.1.1最新事件-更多
+    [Tags]    街道    页面检测    首页
+    首页页面检测(1层)    事件列表    xpath=/html/body/div/div[1]/div[2]/div[1]/div[1]/div[1]/div/a/span    xpath=/html/body/div/div/header/ul/li[3]    ${街道后台首页地图}
+    [Teardown]    关闭所有页

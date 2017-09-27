@@ -1,0 +1,21 @@
+*** Settings ***
+Resource          ../../流程关键字/03.客服流程关键字.txt
+Resource          ../../流程关键字/02.检测流程关键字.txt
+
+*** Test Cases ***
+4.1.1服务大厅页面检测
+    [Tags]    街道    页面检测    民生服务
+    Reload Page
+    导航页面检测(1层)    服务大厅    &{街道菜单}[民生服务]    &{街道iframe}[民生服务]    xpath=/html/body/div[1]/div/div/ul/li[1]/div/div[1]/h1
+    Mouse Over    xpath=/html/body/div[1]/div/div/ul/li[1]/div
+    Wait Until Element Is Visible    xpath=/html/body/div[1]/div/div/ul/li[1]/div/div[2]/a
+    点击元素    xpath=/html/body/div[1]/div/div/ul/li[1]/div/div[2]/a
+    切换iframe    &{街道iframe}[服务大厅]
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    服务大厅
+
+4.1.2类型关键字查询
+    [Tags]    街道    查询    民生服务
+    ${result}=    查表是否没有记录（返回值）
+    Run Keyword If    ${result}    输出结果    没有找到匹配的记录
+    ...    ELSE    服务大厅类型关键字状态查询
+    [Teardown]    关闭所有页

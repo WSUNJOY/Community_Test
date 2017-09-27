@@ -1,0 +1,27 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+
+*** Test Cases ***
+1.2.1评分
+    [Tags]    街道    页面检测    首页
+    切换到社区首页iframe
+    ${followuser}=    Get Text    id=followUser
+    点击元素    xpath=//*[@id="scoreClick"]/span
+    Wait Until Element Is Visible    xpath=//*[@id="layui-layer2"]/div[1]
+    Element Text Should Be    xpath=//*[@id="layui-layer2"]/div[1]    评分规则
+    输入    id=Livelihoodservices    0    #社区民生服务
+    输入    id=civilizationconstruction    0    #社区文明建设
+    输入    id=Residentactivity    0    #居民活跃度
+    输入    id=Eventhandlingrate    0    #社会咨询处置率
+    输入    id=InformationPerfection    0    #信息完善度
+    输入    id=CommunityConcern    100    #社区关注度
+    Select Radio Button    radioInline    0    #上一周
+    点击元素    xpath=//*[@id="layui-layer2"]/div[3]/a[1]
+    Wait Until Element Is Visible    xpath=//*[@id="layui-layer4"]/div[3]/a[1]
+    ${value1}=    Get Value    xpath=//*[@id="list"]/div[1]/div/input
+    ${value2}=    Get Value    xpath=//*[@id="list"]/div[2]/div/input
+    ${value3}=    Get Value    xpath=//*[@id="list"]/div[3]/div/input
+    ${F}=    Evaluate    str(${value1}+${value2}+${value3})
+    Should Be Equal    ${followuser}    ${F}
+    点击元素    xpath=//*[@id="layui-layer4"]/div[3]/a[1]
+    [Teardown]    关闭所有页

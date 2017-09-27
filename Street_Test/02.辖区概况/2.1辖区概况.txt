@@ -1,0 +1,9 @@
+*** Settings ***
+Resource          ../../流程关键字/03.客服流程关键字.txt
+Resource          ../../流程关键字/02.检测流程关键字.txt
+
+*** Test Cases ***
+2.1.1辖区概况页面检测
+    [Tags]    街道    页面检测    辖区概况
+    导航页面检测(1层)    小区分布    &{街道菜单}[辖区概况]    &{街道iframe}[辖区概况]    xpath=/html/body/div/div/div/div[1]/div/div[1]/h5
+    [Teardown]    关闭所有页

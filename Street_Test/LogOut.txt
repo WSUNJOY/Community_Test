@@ -1,0 +1,7 @@
+*** Settings ***
+Resource          ../流程关键字/系统关键字.txt
+
+*** Test Cases ***
+退出
+    [Tags]    街道    登出
+    关闭浏览器

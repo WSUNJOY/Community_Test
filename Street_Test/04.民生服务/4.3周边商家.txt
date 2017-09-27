@@ -1,0 +1,14 @@
+*** Settings ***
+Resource          ../../流程关键字/03.客服流程关键字.txt
+Resource          ../../流程关键字/02.检测流程关键字.txt
+
+*** Test Cases ***
+4.3.1周边商家页面检测
+    [Tags]    街道    页面检测    民生服务
+    导航页面检测(1层)    服务大厅    &{街道菜单}[民生服务]    &{街道iframe}[民生服务]    xpath=/html/body/div[1]/div/div/ul/li[1]/div/div[1]/h1
+    Mouse Over    xpath=/html/body/div[1]/div/div/ul/li[3]/div
+    Wait Until Element Is Visible    xpath=/html/body/div[1]/div/div/ul/li[3]/div/div[2]/a
+    点击元素    xpath=/html/body/div[1]/div/div/ul/li[3]/div/div[2]/a
+    切换iframe    &{街道iframe}[周边商家]
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    店铺列表
+    [Teardown]    关闭所有页

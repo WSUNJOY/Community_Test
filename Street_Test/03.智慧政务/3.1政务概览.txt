@@ -1,0 +1,57 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+
+*** Test Cases ***
+3.1.1政务概览页面检测
+    [Tags]    街道    页面检测    政务概览
+    导航页面检测(2层)    通知公告    &{街道菜单}[智慧政务]    &{街道菜单}[政务概览]    &{街道iframe}[政务概览]    xpath=/html/body/div/div/h3
+
+3.1.2政务概览页面点击事件处理
+    [Tags]    街道    页面检测    政务概览
+    点击元素    xpath=/html/body/div/div/div[1]/div[1]/a/div
+    切换iframe    name=iframeundefined
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    事件列表
+    [Teardown]    关闭所有页
+
+3.1.3政务概览页面点击进入文明建设
+    [Tags]    街道    页面检测    政务概览
+    导航页面检测(2层)    通知公告    &{街道菜单}[智慧政务]    &{街道菜单}[政务概览]    &{街道iframe}[政务概览]    xpath=/html/body/div/div/h3
+    点击元素    xpath=/html/body/div/div/div[2]/div[1]/div/a/span
+    切换iframe    name=iframeundefined
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    文明建设列表
+    Unselect Frame
+    点击元素    xpath=//*[@id="page-wrapper"]/div[2]/nav/div/a[3]/i
+    Select Frame    &{街道iframe}[政务概览]
+    ${title}=    Get Text    xpath=//*[@id="listActivity"]/div[1]/div/a/div[2]/div[1]
+    点击元素    xpath=//*[@id="listActivity"]/div[1]/div/a/div[1]/div/div
+    切换iframe    name=iframeundefined
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    文明建设详情
+    [Teardown]    关闭所有页
+
+3.1.4政务概览页面点击进入政策解读
+    [Tags]    街道    页面检测    政务概览
+    导航页面检测(2层)    通知公告    &{街道菜单}[智慧政务]    &{街道菜单}[政务概览]    &{街道iframe}[政务概览]    xpath=/html/body/div/div/h3
+    点击元素    xpath=/html/body/div/div/div[3]/div[1]/div/div[1]/div/a[2]/span
+    切换iframe    name=iframeundefined
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    政策解读列表
+    Unselect Frame
+    点击元素    xpath=//*[@id="page-wrapper"]/div[2]/nav/div/a[3]/i
+    Select Frame    &{街道iframe}[政务概览]
+    点击元素    xpath=/html/body/div/div/div[3]/div[1]/div/div[1]/div/a[1]
+    切换iframe    name=iframeundefined
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    政策解读
+    [Teardown]    关闭所有页
+
+3.1.5政务概览页面点击进入就业创业
+    [Tags]    街道    页面检测    政务概览
+    导航页面检测(2层)    通知公告    &{街道菜单}[智慧政务]    &{街道菜单}[政务概览]    &{街道iframe}[政务概览]    xpath=/html/body/div/div/h3
+    点击元素    xpath=/html/body/div/div/div[3]/div[2]/div/div[1]/div/a[2]/span
+    切换iframe    name=iframeundefined
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    就业创业列表
+    Unselect Frame
+    点击元素    xpath=//*[@id="page-wrapper"]/div[2]/nav/div/a[3]/i
+    Select Frame    &{街道iframe}[政务概览]
+    点击元素    xpath=/html/body/div/div/div[3]/div[2]/div/div[1]/div/a[1]
+    切换iframe    name=iframeundefined
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    就业创业
+    [Teardown]    关闭所有页

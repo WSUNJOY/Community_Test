@@ -1,0 +1,46 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+
+*** Test Cases ***
+3.6.1文明建设页面检测
+    [Tags]    街道    页面检测    文明建设
+    导航页面检测(2层)    文明建设列表    &{街道菜单}[智慧政务]    &{街道菜单}[文明建设]    &{街道iframe}[文明建设]    xpath=/html/body/div/div/header/ul/li[3]
+
+3.6.2社区查询
+    [Tags]    街道    查询    文明建设
+    随机下拉框选择by index    id=Communitys    1    2
+    ${Community}=    Get Selected List Label    id=Communitys
+    查询
+    判断查询结果    5    ${Community}
+    选择下拉框by value    id=Communitys    -1
+    查询
+
+3.6.3类型查询
+    [Tags]    街道    查询    文明建设
+    随机下拉框选择by index    id=states    1    3
+    ${states}=    Get Selected List Label    id=states
+    查询
+    判断查询结果    3    ${states}
+    选择下拉框by value    id=states    -1
+    查询
+
+3.6.4关键字查询
+    [Tags]    街道    查询    文明建设
+    ${Title}=    获取单元格（返回值）    2    2
+    输入    id=keyWord    ${Title}
+    查询
+    判断查询结果    2    ${Title}
+    截图
+    清空输入框    id=keyWord
+    查询
+
+3.6.5文明建设详情
+    [Tags]    街道    查询    文明建设
+    ${name}=    获取单元格（返回值）    2    2
+    输出结果    ${name}
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[6]/a    #点击详情
+    截图
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    文明建设详情
+    ${remark}=    get text    id=remark
+    输出结果    活动内容：${remark}
+    [Teardown]    关闭所有页

@@ -1,0 +1,40 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/07.功能管理流程关键字.txt
+
+*** Test Cases ***
+3.7.1添加政策解读
+    [Tags]    街道    新增    政策解读
+    导航页面检测(2层)    政策解读列表    &{街道菜单}[智慧政务]    &{街道菜单}[政策解读]    &{街道iframe}[政策解读]    xpath=/html/body/div/div/header/ul/li[3]
+    进入政策解读发布页面
+    ${title}=    生成标题（返回type+ymd）    NEW
+    编辑政策解读/就业创业内容    ${title}
+    切换iframe    &{街道iframe}[政策解读]
+    点击非页面的按钮    id=btnSave    #发布
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    政策解读列表
+    ${chk1}=    单元格是否包含（返回值）    2    2    ${title}
+    判断if    ${chk1}    添加成功    添加失败
+
+3.7.2编辑政策解读
+    [Tags]    街道    编辑    政策解读
+    切换iframe    &{街道iframe}[政策解读]
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[7]/a[2]    #编辑
+    检测页面元素是否正确    xpath=/html/body/div[1]/div/header/ul/li[3]    政策解读
+    ${title}=    生成标题（返回type+ymd）    EDIT
+    编辑政策解读/就业创业内容    ${title}
+    切换iframe    &{街道iframe}[政策解读]
+    点击非页面的按钮    id=btnSave    #发布
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    政策解读列表
+    ${chk1}=    单元格是否包含（返回值）    2    2    ${title}
+    判断if    ${chk1}    编辑成功    编辑失败
+    [Teardown]    关闭所有页
+
+3.7.3删除政策解读
+    [Tags]    街道    删除    政策解读
+    导航页面检测(2层)    政策解读列表    &{街道菜单}[智慧政务]    &{街道菜单}[政策解读]    &{街道iframe}[政策解读]    xpath=/html/body/div/div/header/ul/li[3]
+    ${Title}=    获取单元格（返回值）    2    2
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[7]/a[3]    #删除
+    点击元素    xpath=//*[@id="layui-layer1"]/div[3]/a[1]    #确定
+    检测单元格是否包含    2    2    ${Title}    报错    ${Title}删除失败    输出结果
+    ...    ${Title}删除成功
+    [Teardown]    关闭所有页

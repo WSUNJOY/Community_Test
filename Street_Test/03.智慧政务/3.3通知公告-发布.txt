@@ -1,0 +1,80 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/07.功能管理流程关键字.txt
+
+*** Test Cases ***
+3.3.1通知公告直接发布
+    [Tags]    街道    页面检测    通知公告
+    导航页面检测(2层)    通知公告    &{街道菜单}[智慧政务]    &{街道菜单}[通知公告]    &{街道iframe}[通知公告]    xpath=/html/body/div/div/header/ul/li[3]
+    进入通知公告发布页面
+    ${NoticeTitle}=    生成标题（返回type+ymd）    ADD
+    编辑通知公告内容    ${NoticeTitle}    &{街道iframe}[通知公告]
+    选择街道通知公告发送范围    ${复兴小区}
+    点击非页面的按钮    id=btnAdd    #发布
+    点击元素    xpath=/html/body/div[5]/div[3]/a[1]    #确定发布
+    切换iframe    &{街道iframe}[通知公告]
+    等页面表格加载完
+    sleep    5
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    通知公告
+    判断是否发布成功    ${NoticeTitle}    已发布
+
+3.2.2存草稿
+    [Tags]    街道    新增    草稿    通知公告
+    切换iframe    &{街道iframe}[通知公告]    #通知公告框架
+    进入通知公告发布页面
+    ${NoticeTitle}=    生成标题（返回type+ymd）    Draft
+    编辑通知公告内容    ${NoticeTitle}    &{街道iframe}[通知公告]
+    选择街道通知公告发送范围    ${复兴小区}
+    点击非页面的按钮    id=savetrash    #存为草稿
+    切换iframe    &{街道iframe}[通知公告]
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    通知公告
+    等页面表格加载完
+    判断是否发布成功    ${NoticeTitle}    草稿
+
+3.2.3编辑发布
+    [Tags]    街道    编辑    发布    通知公告
+    切换iframe    &{街道iframe}[通知公告]
+    点击元素    id=draftBox    #草稿箱查询
+    判断查询结果    6    草稿
+    切换iframe    &{街道iframe}[通知公告]
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[7]/a[1]    #编辑
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    发布通知公告
+    ${NoticeTitle}=    生成标题（返回type+ymd）    Edit
+    编辑通知公告内容    ${NoticeTitle}    &{街道iframe}[通知公告]
+    点击非页面的按钮    id=btnAdd    #发布
+    点击元素    xpath=/html/body/div[5]/div[3]/a[1]    #确定发布
+    切换iframe    &{街道iframe}[通知公告]
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    通知公告
+    等页面表格加载完
+    判断是否发布成功    ${NoticeTitle}    已发布
+    点击元素    id=all    #全部查询
+
+3.2.4定时发布
+    [Tags]    街道    新增    发布    通知公告
+    切换iframe    &{街道iframe}[通知公告]
+    进入通知公告发布页面
+    ${NoticeTitle}=    生成标题（返回type+ymd）    TIME
+    编辑通知公告内容    ${NoticeTitle}    &{街道iframe}[通知公告]
+    选择街道通知公告发送范围    ${复兴小区}
+    点击非页面的按钮    id=orderpublic    #定时发布
+    输入定时时间    NOW+3min
+    点击元素    xpath=//*[@id="layui-layer1"]/div[3]/a[1]    #确定
+    切换iframe    &{街道iframe}[通知公告]
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    通知公告
+    等页面表格加载完
+    判断是否发布成功    ${NoticeTitle}    待发布
+    [Teardown]    关闭所有页
+
+3.2.5删除
+    [Tags]    街道    删除    通知公告
+    导航页面检测(2层)    通知公告    &{街道菜单}[智慧政务]    &{街道菜单}[通知公告]    &{街道iframe}[通知公告]    xpath=/html/body/div/div/header/ul/li[3]
+    点击元素    id=alreadyReleased    #已发布查询
+    ${Title}=    获取单元格（返回值）    2    2
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[7]/a[2]    #删除
+    点击元素    xpath=//*[@id="layui-layer1"]/div[3]/a[1]    #确定
+    切换iframe    &{街道iframe}[通知公告]
+    等页面表格加载完
+    检测单元格是否包含    2    2    ${Title}    报错    '${Title}'删除失败    输出结果
+    ...    '${Title}'删除成功
+    点击元素    id=all    #已发布查询
+    [Teardown]    关闭所有页
