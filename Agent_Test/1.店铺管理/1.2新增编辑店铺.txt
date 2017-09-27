@@ -1,0 +1,85 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/10.店铺管理流程关键字.txt
+
+*** Test Cases ***
+1.2.1添加-取消
+    [Tags]    代理    添加    店铺管理
+    导航页面检测(2层)    店铺列表    &{代理菜单}[店铺管理1]    &{代理菜单}[店铺管理2]    &{代理iframe}[店铺管理]    xpath=/html/body/div/header/ul/li[3]
+    点击元素    id=btnAdd    #点击发布按钮
+    检测页面元素是否正确    xpath=/html/body/div[1]/header/ul/li[3]    店铺编辑
+    点击非页面的按钮    id=btnCancel    #取消
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    店铺列表
+
+1.2.2添加店铺
+    [Tags]    代理    添加    店铺管理
+    #:FOR    ${i}    in    @{shopname}    #增加若干个店铺
+    点击元素    id=btnAdd    #点击发布按钮
+    检测页面元素是否正确    xpath=/html/body/div[1]/header/ul/li[3]    店铺编辑
+    ${shopname}=    生成标题（返回type+ymd）    AddShop
+    填写店铺信息    ${shopname}
+    切换iframe    &{代理iframe}[店铺管理]
+    点击非页面的按钮    id=btnSave    #确定
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    店铺列表
+    切换iframe    &{代理iframe}[店铺管理]
+    检测单元格是否包含    2    2    ${shopname}    输出结果    添加店铺'${shopname}'成功    报错
+    ...    添加店铺'${shopname}'失败
+    [Teardown]    关闭所有页
+
+1.2.3编辑-取消
+    [Tags]    代理    编辑    店铺管理
+    导航页面检测(2层)    店铺列表    &{代理菜单}[店铺管理1]    &{代理菜单}[店铺管理2]    &{代理iframe}[店铺管理]    xpath=/html/body/div/header/ul/li[3]
+    点击元素    id=noOpen    #查询未开通
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[10]/a[2]    #点击编辑
+    检测页面元素是否正确    xpath=/html/body/div[1]/div/div[1]/div/div[1]    店铺基本信息
+    点击非页面的按钮    id=btnCancel    #取消
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    店铺列表
+
+1.2.4编辑店铺
+    [Tags]    代理    编辑    店铺管理
+    切换iframe    &{代理iframe}[店铺管理]
+    点击元素    id=noOpen    #查询未开通
+    ${shopname}=    生成标题（返回type+ymd）    EditShop
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[10]/a[2]    #点击编辑
+    检测页面元素是否正确    xpath=/html/body/div[1]/div/div[1]/div/div[1]    店铺基本信息
+    重新编辑店铺名称    ${shopname}
+    切换iframe    &{代理iframe}[店铺管理]
+    点击非页面的按钮    id=btnSave    #确定
+    点击非页面的按钮    id=btnCancel    #确定
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    店铺列表
+    切换iframe    &{代理iframe}[店铺管理]
+    点击元素    id=noOpen    #查询未开通
+    检测单元格是否包含    2    2    ${shopname}    输出结果    编辑店铺'${shopname}'保存成功    报错
+    ...    编辑店铺'${shopname}'失败
+
+1.2.5添加师傅
+    [Tags]    代理    添加    店铺管理
+    #:FOR    ${i}    in    @{shopname}    #增加若干个店铺
+    点击元素    id=btnAdd    #点击发布按钮
+    检测页面元素是否正确    xpath=/html/body/div[1]/header/ul/li[3]    店铺编辑
+    ${shopname}=    生成标题（返回type+ymd）    AddShiFu
+    填写师傅信息    ${shopname}
+    切换iframe    &{代理iframe}[店铺管理]
+    点击非页面的按钮    id=btnSave    #确定
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    店铺列表
+    切换iframe    &{代理iframe}[店铺管理]
+    检测单元格是否包含    2    2    ${shopname}    输出结果    添加店铺${shopname}成功    报错
+    ...    添加店铺${shopname}失败
+
+1.2.6编辑师傅
+    [Tags]    代理    编辑    店铺管理
+    切换iframe    &{代理iframe}[店铺管理]
+    点击元素    id=noOpen    #查询未开通
+    ${shopname}=    生成标题（返回type+ymd）    EditShiFu
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[10]/a[2]    #点击编辑
+    检测页面元素是否正确    xpath=/html/body/div[1]/div/div[1]/div/div[1]    店铺基本信息
+    重新编辑店铺名称    ${shopname}
+    切换iframe    &{代理iframe}[店铺管理]
+    点击非页面的按钮    id=btnSave    #确定
+    点击非页面的按钮    id=btnCancel    #确定
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    店铺列表
+    切换iframe    &{代理iframe}[店铺管理]
+    点击元素    id=noOpen    #查询未开通
+    检测单元格是否包含    2    2    ${shopname}    输出结果    编辑师傅${shopname}保存成功    报错
+    ...    编辑师傅${shopname}失败
+    [Teardown]    关闭所有页

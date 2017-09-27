@@ -1,0 +1,49 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/07.功能管理流程关键字.txt
+
+*** Test Cases ***
+5.2.1办事办证添加-取消
+    [Tags]    代理    新增    取消    功能管理
+    导航页面检测(2层)    办事办证列表    &{代理菜单}[基础功能]    &{代理菜单}[办事办证]    &{代理iframe}[办事办证]    xpath=/html/body/div/header/ul/li[3]
+    进入代理办事办证发布页面
+    切换iframe    &{代理iframe}[办事办证]
+    点击非页面的按钮    id=btnCancel    #取消
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    办事办证列表
+
+5.2.2添加办事办证
+    [Tags]    代理    新增    功能管理
+    切换iframe    &{代理iframe}[办事办证]
+    进入代理办事办证发布页面
+    ${WorkPermit}=    生成标题（返回type+ymd）    NEW
+    编辑办事办证内容    ${WorkPermit}
+    切换iframe    &{代理iframe}[办事办证]
+    点击非页面的按钮    id=btnSave    #发布
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    办事办证列表
+    #判断是否发布成功    ${WorkPermit}    显示
+    ${chk1}=    单元格是否包含（返回值）    2    2    ${WorkPermit}
+    判断if    ${chk1}    添加成功    添加失败
+
+5.2.3编辑办事办证
+    [Tags]    代理    编辑    功能管理
+    切换iframe    &{代理iframe}[办事办证]
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[6]/a[2]    #编辑
+    检测页面元素是否正确    xpath=/html/body/div[1]/header/ul/li[3]    办事办证
+    ${WorkPermit}=    生成标题（返回type+ymd）    EDIT
+    编辑办事办证内容    ${WorkPermit}
+    切换iframe    &{代理iframe}[办事办证]
+    点击非页面的按钮    id=btnSave    #发布
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    办事办证列表
+    #判断是否发布成功    ${WorkPermit}    显示
+    ${chk1}=    单元格是否包含（返回值）    2    2    ${WorkPermit}
+    判断if    ${chk1}    添加成功    添加失败
+
+5.2.4删除办事办证
+    [Tags]    代理    删除    功能管理
+    切换iframe    &{代理iframe}[办事办证]
+    ${Title}=    获取单元格（返回值）    2    2
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[6]/a[3]    #删除
+    点击元素    xpath=//*[@id="layui-layer1"]/div[3]/a[1]    #确定
+    检测单元格是否包含    2    2    ${Title}    报错    '${Title}'删除失败    输出结果
+    ...    '${Title}'删除成功
+    [Teardown]    关闭所有页

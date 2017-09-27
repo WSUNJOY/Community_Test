@@ -1,0 +1,20 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/10.店铺管理流程关键字.txt
+
+*** Test Cases ***
+1.6.1服务管理页面检测
+    [Tags]    代理    页面检测    店铺管理    商品管理
+    导航页面检测(2层)    店铺列表    &{代理菜单}[店铺管理1]    &{代理菜单}[店铺管理2]    &{代理iframe}[店铺管理]    xpath=/html/body/div/header/ul/li[3]
+    选择下拉框by label    id=ShopTypeId    师傅
+    点击元素    id=opened
+    ${result}=    查表是否没有记录（返回值）
+    Run Keyword If    ${result}    输出结果    没有已开通的店铺
+    ...    ELSE    进入服务管理页面
+
+1.6.2服务搜索
+    [Tags]    代理    查询    店铺管理    商品管理
+    ${result}=    查表是否没有记录（返回值）
+    Run Keyword If    ${result}==True    输出结果    没有找到匹配的记录
+    ...    ELSE    查询第一个商品
+    [Teardown]

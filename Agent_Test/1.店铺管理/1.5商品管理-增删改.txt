@@ -1,0 +1,120 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/10.店铺管理流程关键字.txt
+
+*** Test Cases ***
+1.5.1增加商品-取消
+    [Tags]    代理    添加    店铺管理    商品管理
+    导航页面检测(2层)    店铺列表    &{代理菜单}[店铺管理1]    &{代理菜单}[店铺管理2]    &{代理iframe}[店铺管理]    xpath=/html/body/div/header/ul/li[3]
+    选择下拉框by label    id=ShopTypeId    店铺
+    点击元素    id=opened
+    ${shopname}=    获取单元格（返回值）    2    2
+    输出结果    开始对'${shopname}'商品管理测试
+    点击非页面元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[10]/a[5]    #进入商品管理
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    商品管理
+    点击元素    id=btnAdd    #添加商品
+    切换iframe    &{代理iframe}[店铺管理]
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    商品管理
+    ${goodname}=    生成标题（返回type+ymd）    AddGoods
+    填写商品信息    ${goodname}
+    切换iframe    &{代理iframe}[店铺管理]
+    点击非页面的按钮    id=btnCancel    #取消
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    商品管理
+    切换iframe    &{代理iframe}[店铺管理]
+    检测单元格是否包含    2    2    ${goodname}    报错    添加商品'${goodname}'取消失败    输出结果
+    ...    添加商品'${goodname}'取消成功
+    截图
+
+1.5.2增加商品
+    [Tags]    代理    添加    店铺管理    商品管理
+    #: FOR    ${i}    IN RANGE    42    45    #in range后：开始/结束/步长
+    点击元素    id=btnAdd    #添加商品
+    切换iframe    &{代理iframe}[店铺管理]
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    商品管理
+    ${goodname}=    生成标题（返回type+ymd）    AddGoods
+    填写商品信息    ${goodname}
+    切换iframe    &{代理iframe}[店铺管理]
+    点击非页面的按钮    id=btnSave    #确定
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    商品管理
+    切换iframe    &{代理iframe}[店铺管理]
+    检测单元格是否包含    2    2    ${goodname}    输出结果    添加商品'${goodname}'成功    报错
+    ...    添加商品'${goodname}'失败
+    截图
+
+1.5.3编辑商品-取消
+    [Tags]    代理    编辑    店铺管理    商品管理
+    ${goodname1}=    获取单元格（返回值）    2    2
+    ${goodname}=    生成标题（返回type+ymd）    EditGoods
+    ${price}=    生成随机数    1    100
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[9]/a[1]    #点击编辑
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    商品管理
+    重新编辑商品信息    ${goodname}    ${price}
+    点击非页面的按钮    id=btnCancel    #取消
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    商品管理
+    输入    id=KeyWord    ${goodname}
+    查询
+    检测单元格是否包含    2    2    ${goodname}    报错    编辑商品'${goodname1}'取消失败    输出结果
+    ...    编辑商品'${goodname1}'取消成功
+
+1.5.4编辑商品
+    [Tags]    代理    编辑    店铺管理    商品管理
+    切换iframe    &{代理iframe}[店铺管理]
+    清空输入框    id=KeyWord
+    查询
+    ${goodname1}=    获取单元格（返回值）    2    2
+    ${goodname}=    生成标题（返回type+ymd）    EditGoods
+    ${price}=    生成随机数    1    100
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[9]/a[1]    #点击编辑
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    商品管理
+    重新编辑商品信息    ${goodname}    ${price}
+    截图
+    点击非页面的按钮    id=btnSave    #确定
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    商品管理
+    截图
+    输入    id=KeyWord    ${goodname}
+    查询
+    检测单元格是否包含    2    2    ${goodname}    输出结果    编辑商品'${goodname1}'取消成功    报错
+    ...    编辑商品'${goodname1}'取消失败
+    单元格是否包含    2    3    ${price}
+    截图
+
+1.5.5上下架
+    [Tags]    代理    上下架    店铺管理    商品管理
+    点击元素    id=noOpen    #查询出售中
+    ${goodname}=    获取单元格（返回值）    2    2
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[9]/a[2]    #下架
+    弹出框-取消
+    输入    id=KeyWord    ${goodname}
+    查询
+    单元格是否包含    2    8    出售中
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[9]/a[2]    #下架
+    弹出框-确定
+    点击元素    id=closeed    #查询已下架
+    检测单元格是否包含    2    8    已下架    输出结果    '${goodname}'下架成功    报错
+    ...    '${goodname}'下架失败
+    截图
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[9]/a[2]    #上架
+    点击元素    xpath=//*[@id="layui-layer4"]/div[3]/a[2]    #取消
+    单元格是否包含    2    8    已下架
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[9]/a[2]    #上架
+    点击元素    xpath=//*[@id="layui-layer5"]/div[3]/a[1]    #确定
+    点击元素    id=noOpen    #查询出售中
+    检测单元格是否包含    2    8    出售中    输出结果    '${goodname}'上架成功    报错
+    ...    '${goodname}'上架失败
+    截图
+
+1.5.6删除商品
+    [Tags]    代理    删除    店铺管理    商品管理
+    点击元素    id=all    #查询全部
+    ${goodname}=    获取单元格（返回值）    2    2
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[9]/a[3]    #删除
+    点击元素    xpath=//*[@id="layui-layer7"]/div[3]/a[2]    #取消
+    输入    id=KeyWord    ${goodname}
+    查询
+    单元格是否包含    2    2    ${goodname}
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[9]/a[3]    #删除
+    点击元素    xpath=//*[@id="layui-layer8"]/div[3]/a[1]    #确定
+    ${result}=    查表是否没有记录（返回值）
+    判断if    ${result}==True    删除'${goodname}'成功    删除'${goodname}'失败
+    截图
+    [Teardown]    关闭所有页

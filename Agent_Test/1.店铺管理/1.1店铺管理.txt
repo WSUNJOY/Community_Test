@@ -1,0 +1,55 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/10.店铺管理流程关键字.txt
+
+*** Test Cases ***
+1.1.1店铺管理页面检测
+    [Tags]    代理    页面检测    店铺管理
+    导航页面检测(2层)    店铺列表    &{代理菜单}[店铺管理1]    &{代理菜单}[店铺管理2]    &{代理iframe}[店铺管理]    xpath=/html/body/div/header/ul/li[3]
+
+1.1.2状态查询
+    [Tags]    代理    查询    店铺管理
+    ${result}=    查表是否没有记录（返回值）
+    Run Keyword If    ${result}    输出结果    没有找到匹配的记录
+    ...    ELSE    店铺状态查询
+
+1.1.3店铺类型查询
+    [Tags]    代理    查询    店铺管理
+    随机下拉框选择by index    id=ShopTypeId    1    2
+    ${type1}=    Get Selected List Label    id=ShopTypeId
+    查询
+    判断查询结果    6    ${type1}
+    截图
+    随机下拉框选择by index    id=IndustryId    1    18
+    ${type2}=    Get Selected List Label    id=IndustryId
+    查询
+    截图
+    判断查询结果    5    ${type2}
+    选择下拉框by value    id=ShopTypeId    0
+    选择下拉框by value    id=IndustryId    0
+    查询
+
+1.1.4关键字查询
+    [Tags]    代理    查询    店铺管理
+    ${shopname}=    获取单元格（返回值）    2    2
+    输入    id=KeyWord    ${shopname}
+    查询
+    判断查询结果    2    ${shopname}
+    清空输入框    id=KeyWord
+    查询
+
+1.1.5查看详情
+    [Tags]    代理    查询    店铺管理
+    ${shopname}=    获取单元格（返回值）    2    2
+    ${name}=    获取单元格（返回值）    2    3
+    ${phone}=    获取单元格（返回值）    2    4
+    ${type}=    获取单元格（返回值）    2    6
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[10]/a[1]    #点击详情
+    截图
+    检测页面元素是否正确    xpath=/html/body/div/div/div[1]/div/div[1]    店铺基本信息
+    ${chk1} =    验证元素是否等于（返回值）    xpath=//*[@id="form1"]/div/div[3]/div/label    ${shopname}
+    ${chk2} =    验证元素是否等于（返回值）    xpath=//*[@id="form1"]/div/div[9]/div/label    ${name}
+    ${chk3} =    验证元素是否等于（返回值）    xpath=//*[@id="form1"]/div/div[11]/div/label    ${phone}
+    ${chk4} =    验证元素是否等于（返回值）    xpath=//*[@id="form1"]/div/div[5]/div/label    ${type}
+    判断if    ${chk1} and ${chk2} and ${chk3} and ${chk4}    详情页与列表信息相符    详情页与列表信息不符
+    [Teardown]    关闭所有页

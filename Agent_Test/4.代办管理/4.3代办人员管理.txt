@@ -1,0 +1,38 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+
+*** Test Cases ***
+4.3.1代办人员管理页面检测
+    [Tags]    代理    页面检测    代办管理
+    导航页面检测(2层)    代办人员管理    &{代理菜单}[代办管理]    &{代理菜单}[代办人员管理]    &{代理iframe}[代办人员管理]    xpath=/html/body/div/header/ul/li[3]
+
+4.3.2下拉框查询
+    [Tags]    代理    查询    代办管理
+    随机下拉框选择by index    id=TypeId    1    9
+    ${type}=    Get Selected List Label    id=TypeId
+    查询
+    判断查询结果    4    ${type}
+    截图
+    选择下拉框by value    id=TypeId    0
+    查询
+
+4.3.3关键字查询
+    [Tags]    代理    查询    代办管理
+    ${name}=    获取单元格（返回值）    2    2
+    输入    xpath=//*[@id="keyWord"]    ${name}
+    查询
+    判断查询结果    2    ${name}
+    清空输入框    xpath=//*[@id="keyWord"]
+    查询
+
+4.3.4代办人员详情
+    [Tags]    代理    查询    代办管理
+    ${name}=    获取单元格（返回值）    2    2
+    ${phone}=    获取单元格（返回值）    2    3
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[6]/a[1]    #点击详情
+    截图
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    代办人管理
+    ${chk1} =    验证元素是否等于（返回值）    xpath=//*[@id="form1"]/div/div[1]/div/p    ${name}
+    ${chk2} =    验证元素是否等于（返回值）    xpath=//*[@id="form1"]/div/div[5]/div/p    ${phone}
+    判断if    ${chk1} and ${chk2}    查看详情正确    查看详情有误
+    [Teardown]    关闭所有页

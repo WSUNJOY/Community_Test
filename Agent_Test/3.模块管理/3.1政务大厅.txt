@@ -1,0 +1,22 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/06.模块管理流程关键字.txt
+
+*** Test Cases ***
+3.1.1政务大厅页面检测
+    [Tags]    代理    页面检测    模块管理
+    导航页面检测(2层)    服务大厅    &{代理菜单}[模块管理]    &{代理菜单}[政务大厅]    &{代理iframe}[政务大厅]    xpath=/html/body/div/header/ul/li[3]
+
+3.1.2类型关键字查询
+    [Tags]    代理    查询    模块管理
+    ${type}=    获取单元格（返回值）    2    3
+    Select From List By Label    id=typeId    ${type}
+    查询
+    判断查询结果    3    ${type}
+    ${title}=    获取单元格（返回值）    2    2
+    输入    xpath=//*[@id="keyWord"]    ${title}
+    查询
+    判断查询结果    2    ${title}
+    清空输入框    xpath=//*[@id="keyWord"]
+    查询
+    [Teardown]    关闭所有页

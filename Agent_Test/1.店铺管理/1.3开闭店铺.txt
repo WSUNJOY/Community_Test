@@ -1,0 +1,67 @@
+*** Settings ***
+Metadata          \    ${EMPTY}
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/10.店铺管理流程关键字.txt
+
+*** Test Cases ***
+1.3.1开通店铺-取消
+    [Tags]    代理    开通    店铺管理
+    导航页面检测(2层)    店铺列表    &{代理菜单}[店铺管理1]    &{代理菜单}[店铺管理2]    &{代理iframe}[店铺管理]    xpath=/html/body/div/header/ul/li[3]
+    随机下拉框选择by index    id=ShopTypeId    1    2
+    点击元素    id=noOpen    #查询未开通
+    ${shopname}=    获取单元格（返回值）    2    2
+    ${type}=    获取单元格（返回值）    2    6
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr/td[10]/a[3]    #开通店铺
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    开通店铺
+    点击非页面的按钮    id=btnCancel    #取消
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    店铺列表
+    切换iframe    &{代理iframe}[店铺管理]
+    选择下拉框by label    id=ShopTypeId    ${type}
+    输入    id=KeyWord    ${shopname}
+    查询
+    检测单元格是否包含    2    8    未开通    输出结果    店铺'${shopname}'取消开通成功    报错
+    ...    店铺'${shopname}'取消开通失败
+
+1.3.2开通店铺
+    [Tags]    代理    开通    店铺管理
+    切换iframe    &{代理iframe}[店铺管理]
+    随机下拉框选择by index    id=ShopTypeId    1    2
+     清空输入框    id=KeyWord
+    点击元素    id=noOpen    #查询未开通
+    ${shopname}=    获取单元格（返回值）    2    2
+    ${type}=    获取单元格（返回值）    2    6
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr/td[10]/a[3]    #开通店铺
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    开通店铺
+    填写开通店铺信息
+    点击非页面的按钮    id=btnSave    #确定
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    店铺列表
+    切换iframe    &{代理iframe}[店铺管理]
+    选择下拉框by label    id=ShopTypeId    ${type}
+    输入    id=KeyWord    ${shopname}
+    查询
+    检测单元格是否包含    2    8    已开通    输出结果    店铺'${shopname}'取消开通成功    报错
+    ...    店铺'${shopname}'取消开通失败
+    截图
+
+1.3.3关闭店铺
+    [Tags]    代理    关闭    店铺管理
+    切换iframe    &{代理iframe}[店铺管理]
+    随机下拉框选择by index    id=ShopTypeId    2    2
+     清空输入框    id=KeyWord
+    点击元素    id=opened
+    ${shopname}=    获取单元格（返回值）    2    2
+    ${type}=    获取单元格（返回值）    2    6
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr/td[10]/a[3]    #关闭店铺
+    弹出框-取消
+    检测单元格是否包含    2    8    已开通    输出结果    店铺'${shopname}'取消关闭成功    报错
+    ...    店铺'${shopname}'取消关闭失败
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr/td[10]/a[3]    #关闭店铺
+    弹出框-确定
+    截图
+    切换iframe    &{代理iframe}[店铺管理]
+    选择下拉框by label    id=ShopTypeId    ${type}
+    输入    id=KeyWord    ${shopname}
+    点击元素    id=all
+    检测单元格是否包含    2    8    已关闭    输出结果    店铺'${shopname}'关闭成功    报错
+    ...    店铺'${shopname}'关闭失败
+    [Teardown]    关闭所有页

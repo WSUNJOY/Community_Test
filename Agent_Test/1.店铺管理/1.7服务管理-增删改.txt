@@ -1,0 +1,57 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/10.店铺管理流程关键字.txt
+
+*** Test Cases ***
+1.7.1增加服务
+    [Tags]    代理    添加    店铺管理    商品管理
+    #: FOR    ${i}    IN RANGE    42    45    #in range后：开始/结束/步长
+    点击元素    id=btnAdd    #添加服务
+    切换iframe    &{代理iframe}[店铺管理]
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    服务管理
+    ${servicename}=    生成标题（返回type+ymd）    AddService
+    填写服务信息    ${servicename}
+    切换iframe    &{代理iframe}[店铺管理]
+    点击非页面的按钮    id=btnSave    #确定
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    服务管理
+    切换iframe    &{代理iframe}[店铺管理]
+    检测单元格是否包含    2    2    ${servicename}    输出结果    添加服务${servicename}成功    报错
+    ...    添加服务${servicename}失败
+    截图
+
+1.7.2编辑服务
+    [Tags]    代理    编辑    店铺管理    商品管理
+    切换iframe    &{代理iframe}[店铺管理]
+    清空输入框    id=KeyWord
+    查询
+    ${servicename1}=    获取单元格（返回值）    2    2
+    ${servicename}=    生成标题（返回type+ymd）    EditService
+    ${price}=    生成随机数    1    100
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[5]/a[1]    #点击编辑
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    服务管理
+    重新编辑服务信息    ${servicename}    ${price}
+    截图
+    点击非页面的按钮    id=btnSave    #确定
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    服务管理
+    截图
+    输入    id=KeyWord    ${servicename}
+    查询
+    检测单元格是否包含    2    2    ${servicename}    输出结果    编辑服务${servicename}取消成功    报错
+    ...    编辑服务${servicename}取消失败
+    单元格是否包含    2    4    ${price}
+    截图
+
+1.7.3删除服务
+    [Tags]    代理    删除    店铺管理    商品管理
+    ${servicename}=    获取单元格（返回值）    2    2
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[5]/a[2]    #删除
+    点击元素    xpath=//*[@id="layui-layer1"]/div[3]/a[2]    #取消
+    输入    id=KeyWord    ${servicename}
+    查询
+    单元格是否包含    2    2    ${servicename}
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[5]/a[2]    #删除
+    点击元素    xpath=//*[@id="layui-layer2"]/div[3]/a[1]    #确定
+    ${result}=    查表是否没有记录（返回值）
+    判断if    ${result}    删除${servicename}成功    删除${servicename}失败
+    截图
+    [Teardown]    关闭所有页
