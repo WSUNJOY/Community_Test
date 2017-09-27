@@ -1,0 +1,223 @@
+*** Settings ***
+Library           Selenium2Library
+Resource          Test系统数据.txt
+
+*** Variables ***
+
+*** Keywords ***
+title应该包含text
+    [Arguments]    ${text}
+    ${title}=    get title
+    Run Keyword And Continue On Failure    Should Contain    ${title}    ${text}
+
+上传图片new
+    [Arguments]    ${photoid}    ${path}
+    Choose File    ${photoid}    ${path}    #选择图片
+
+关闭所有页
+    Unselect Frame    #默认iframe
+    Click Element    xpath=//*[@id="page-wrapper"]/div[2]/div/button    #关闭操作
+    Click Element    xpath=//*[@id="page-wrapper"]/div[2]/div/ul/li[3]/a    #关闭所有页面
+    Sleep    5
+
+关闭浏览器
+    Close Browser
+
+切换iframe
+    [Arguments]    ${iframeid}
+    Unselect Frame
+    Select Frame    ${iframeid}
+    Sleep    3
+
+切换到社区首页iframe
+    输出结果    开始首页测试
+    Unselect Frame
+    Select Frame    name=iframe0    #首页框架
+    sleep    3
+    Run Keyword And Continue On Failure    Current Frame Contains    常用统计
+    输出结果    *切换到首页成功*
+
+当前frame
+    Unselect Frame
+
+截图
+    Capture Page Screenshot
+
+打开谷歌浏览器
+    [Arguments]    ${url}
+    Open Browser    ${url}    gc
+
+报错
+    [Arguments]    ${error}
+    输出结果    ${error}
+    截图
+    Fail    *HTML*<b>'${error}'</b>
+
+最大化窗口
+    Maximize Browser Window
+
+查询
+    Click Element    id=btnSearch
+    Sleep    5
+    Capture Page Screenshot
+
+点击元素
+    [Arguments]    ${locator}
+    Click Element    ${locator}
+    sleep    8
+
+点击链接
+    [Arguments]    ${locator}
+    Click Link    ${locator}
+    sleep    5
+
+点击按钮
+    [Arguments]    ${locator}
+    Click Button    ${locator}
+    sleep    5
+
+点击非页面元素
+    [Arguments]    ${locator}
+    Focus    ${locator}
+    Click Element    ${locator}
+    Sleep    5
+
+点击非页面的按钮
+    [Arguments]    ${locator}
+    Focus    ${locator}
+    Click Button    ${locator}
+    Sleep    8
+
+编辑器控件
+    [Arguments]    ${content}
+    Select Frame    id=ueditor_0    #选择编辑内容框架
+    Input Text    xpath=/html/body    ${content}    #填写编辑内容
+
+设置窗口大小
+    [Arguments]    ${width}    ${height}
+    Set Window Size    ${width}    ${height}
+
+输入
+    [Arguments]    ${locator}    ${text}
+    Input text    ${locator}    ${text}
+
+输入密码
+    [Arguments]    ${locator}    ${psw}
+    Input Password    ${locator}    ${psw}
+
+输入关键字
+    [Arguments]    ${keyword}
+    输入    id=KeySearch    ${keyword}
+
+清空输入框
+    [Arguments]    ${locator}
+    Clear Element Text    ${locator}
+
+生成随机数
+    [Arguments]    ${min}    ${max}
+    ${index} =    Evaluate    random.randint(${min}, ${max})    modules=random
+    ${index}    Evaluate    str(${index})
+    Return From Keyword    ${index}
+
+随机下拉框选择by index
+    [Arguments]    ${locator}    ${min}    ${max}
+    ${index} =    Evaluate    random.randint(${min}, ${max})    modules=random
+    ${index}    Evaluate    str(${index})
+    Select From List By Index    ${locator}    ${index}
+
+选择下拉框by label
+    [Arguments]    ${locator}    ${label}
+    Select From List By Label    ${locator}    ${label}
+
+选择下拉框by value
+    [Arguments]    ${locator}    ${value}
+    Select From List By Value    ${locator}    ${value}
+
+验证元素是否包含（返回值）
+    [Arguments]    ${locator}    ${text}
+    Wait Until Element Is Visible    ${locator}
+    ${status}=    Run Keyword And Return Status    Element Should Contain    ${locator}    ${text}
+    Return From Keyword    ${status}
+
+验证元素是否等于（返回值）
+    [Arguments]    ${locator}    ${text}
+    Wait Until Element Is Visible    ${locator}
+    ${status}=    Run Keyword And Return Status    Element Text Should Be    ${locator}    ${text}
+    Return From Keyword    ${status}
+
+查表是否没有记录（返回值）
+    ${status}=    Run Keyword And Return Status    Table Row Should Contain    xpath=//*[@id="gridTable"]    1    没有找到匹配的记录
+    Return From Keyword    ${status}
+
+查表某列是否包含
+    [Arguments]    ${column}    ${text}
+    Table Column Should Contain    xpath=//*[@id="gridTable"]    ${column}    ${text}
+
+查表某行是否包含
+    [Arguments]    ${row}    ${text}
+    Table Row Should Contain    xpath=//*[@id="gridTable"]    ${row}    ${text}
+
+单元格是否包含
+    [Arguments]    ${row}    ${column}    ${text}
+    Table Cell Should Contain    xpath=//*[@id="gridTable"]    ${row}    ${column}    ${text}
+
+单元格是否包含（返回值）
+    [Arguments]    ${row}    ${column}    ${text}
+    ${status}=    Run Keyword And Return Status    Table Cell Should Contain    xpath=//*[@id="gridTable"]    ${row}    ${column}    ${text}
+    Return From Keyword    ${status}
+
+获取单元格（返回值）
+    [Arguments]    ${row}    ${column}
+    ${text}=    Get Table Cell    xpath=//*[@id="gridTable"]    ${row}    ${column}
+    Return From Keyword    ${text}
+
+判断if
+    [Arguments]    ${condition}    ${truewd}    ${falsewd}
+    Run Keyword If    ${condition}    输出结果    ${truewd}
+    ...    ELSE    报错    ${falsewd}
+
+检测单元格是否包含
+    [Arguments]    ${column}    ${row}    ${text}    ${truekwd}    ${TArg}    ${falsekwd}
+    ...    ${FArg}
+    ${result}=    单元格是否包含（返回值）    ${column}    ${row}    ${text}
+    Run Keyword If    '${result}'=='True'    ${truekwd}    ${TArg}
+    ...    ELSE    ${falsekwd}    ${FArg}
+    截图
+
+输出结果
+    [Arguments]    ${output}
+    Log    ${output}
+    Log To Console    ${output}
+
+等页面表格加载完
+    Wait Until Element Is Not Visible    /html/body/div/div/div/div/div[1]/div[2]/div[2]    10    加载数据时间过长，超过10s
+
+生成标题（返回type+ymd）
+    [Arguments]    ${text}
+    @{ymd}=    Get Time    year,month,day,hour,min
+    ${title}=    Set Variable    ${text}
+    : FOR    ${i}    IN    @{ymd}
+    \    ${title}=    Evaluate    '${title}'+'${i}'
+    Return From Keyword    ${title}
+
+弹出框-取消
+    Click Element    xpath=//*[@id="layui-layer1"]/div[3]/a[2]    #取消
+    Sleep    5
+
+弹出框-确定
+    Click Element    xpath=//*[@id="layui-layer2"]/div[3]/a[1]    #确定
+    Sleep    5
+
+等待元素可见
+    [Arguments]    ${locator}    ${waitsec}
+    Wait Until Element Is Visible    ${locator}    ${waitsec}
+
+验证元素是否可见（返回值）
+    [Arguments]    ${locator}
+    ${status}=    Run Keyword And Return Status    Element Should Be Visible    ${locator}
+    Return From Keyword    ${status}
+
+读取编辑器内容
+    Select Frame    id=ueditor_0    #选择编辑内容框架
+    ${content}=    get text    xpath=/html/body
+    Return From Keyword    ${content}

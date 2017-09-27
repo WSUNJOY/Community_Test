@@ -1,0 +1,54 @@
+*** Settings ***
+Resource          系统关键字.txt
+Resource          ../流程关键字/02.检测流程关键字.txt
+
+*** Keywords ***
+商品订单状态查询
+    输出结果    待付款查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[2]/span    #待付款
+    等页面表格加载完
+    判断查询结果    7    待付款
+    输出结果    待接单查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[3]/span    #待接单
+    等页面表格加载完
+    判断查询结果    7    待接单
+    输出结果    待收货查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[4]/span    #待收货
+    等页面表格加载完
+    判断查询结果    7    待收货
+    输出结果    待退款查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[5]/span    #待退款
+    等页面表格加载完
+    判断查询结果    7    待退款
+    输出结果    已评价查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[6]/span    #已评价
+    等页面表格加载完
+    判断查询结果    7    交易成功
+    输出结果    全部查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[1]/span    #全部
+    等页面表格加载完
+
+预约订单状态查询
+    输出结果    待付款查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[2]/span    #待付款
+    等页面表格加载完
+    判断查询结果    7    待付款
+    输出结果    待接单查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[3]/span    #待接单
+    等页面表格加载完
+    判断查询结果    7    待接单
+    输出结果    待完成查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[4]/span    #待完成
+    等页面表格加载完
+    判断查询结果    7    待完成
+    输出结果    待取消查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[5]/span    #待取消
+    等页面表格加载完
+    判断查询结果    7    待取消
+    输出结果    已评价查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[6]/span    #已评价
+    等页面表格加载完
+    判断查询结果    7    交易成功
+    输出结果    全部查询
+    点击元素    xpath=//*[@id="formSearch"]/div[1]/div/a[1]/span    #全部
+    等页面表格加载完

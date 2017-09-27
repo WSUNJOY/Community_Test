@@ -1,0 +1,18 @@
+*** Settings ***
+Resource          系统关键字.txt
+
+*** Keywords ***
+输入要查询的时间段
+    [Arguments]    ${begintimeid}    ${endtimeid}
+    ${yyyy}    ${mm}    ${dd} =    Get Time    year,month,day
+    ${begintime}=    Evaluate    '${yyyy}'+'-'+'${mm}'+'-01 00:00:00'    #本月1日
+    ${endtime}=    Evaluate    '${yyyy}'+'-'+'${mm}'+'-'+'${dd}'+' 23:59:59'    #当日
+    ${ym}=    Evaluate    '${yyyy}'+'-'+'${mm}'    #年月
+    输入    ${begintimeid}    ${begintime}
+    输入    ${endtimeid}    ${endtime}
+    Return From Keyword    ${ym}
+
+清除开始结束时间
+    [Arguments]    ${begintimeid}    ${endtimeid}
+    清空输入框    ${begintimeid}
+    清空输入框    ${endtimeid}

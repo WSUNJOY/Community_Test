@@ -1,0 +1,21 @@
+*** Settings ***
+Resource          系统关键字.txt
+
+*** Keywords ***
+输入账号密码登录
+    [Arguments]    ${user}    ${pwd}
+    输入    id=txtaccount    ${user}
+    输入密码    id=txtpassword    ${pwd}
+    点击按钮    id=btlogin
+
+验证登录账号是否正确
+    [Arguments]    ${locator}    ${name}
+    ${result}=    验证元素是否等于（返回值）    ${locator}    ${name}    #验证登录用户
+    Run Keyword If    '${result}'=='True'    输出结果    登录成功
+    ...    ELSE    报错    登录失败
+
+打开登录页面并验证title
+    [Arguments]    ${url}    ${title}
+    打开谷歌浏览器    ${url}
+    设置窗口大小    1040    784
+    title应该包含text    ${title}

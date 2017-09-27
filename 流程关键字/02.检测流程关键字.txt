@@ -1,0 +1,69 @@
+*** Settings ***
+Resource          系统关键字.txt
+
+*** Keywords ***
+首页页面检测(1层)
+    [Arguments]    ${module}    ${clickxpath}    ${chkxpath}    ${waitid}
+    Reload Page
+    切换到社区首页iframe
+    等待元素可见    ${waitid}    5
+    点击元素    ${clickxpath}
+    切换iframe    &{社区iframe}[首页]
+    检测页面元素是否正确    ${chkxpath}    ${module}
+
+首页页面检测(2层)
+    [Arguments]    ${module}    ${clickxpath1}    ${clickxpath2}    ${chkxpath}    ${waitid}
+    Reload Page
+    切换到社区首页iframe
+    等待元素可见    ${waitid}    5
+    点击元素    ${clickxpath1}
+    点击元素    ${clickxpath2}
+    切换iframe    &{社区iframe}[首页]
+    检测页面元素是否正确    ${chkxpath}    ${module}
+
+导航页面检测(1层)
+    [Arguments]    ${module}    ${clickxpath}    ${iframe}    ${chkxpath}
+    点击元素    ${clickxpath}
+    切换iframe    ${iframe}
+    检测页面元素是否正确    ${chkxpath}    ${module}
+
+导航页面检测(2层)
+    [Arguments]    ${module}    ${clickxpath1}    ${clickxpath2}    ${iframe}    ${chkxpath}
+    点击元素    ${clickxpath1}
+    点击元素    ${clickxpath2}
+    点击元素    ${clickxpath1}
+    切换iframe    ${iframe}
+    检测页面元素是否正确    ${chkxpath}    ${module}
+
+导航页面检测(2层，1C2NC)
+    [Arguments]    ${module}    ${clickxpath1}    ${clickxpath2}    ${iframe}    ${chkxpath}
+    点击元素    xpath=//*[@id="page-wrapper"]/div[1]/nav/div/a
+    点击元素    ${clickxpath1}
+    Focus    ${clickxpath2}
+    Press Key    ${clickxpath2}    \\13
+    点击元素    ${clickxpath1}
+    Comment    点击元素    xpath=//*[@id="page-wrapper"]/div[1]/nav/div/a
+    切换iframe    ${iframe}
+    检测页面元素是否正确    ${chkxpath}    ${module}
+
+导航页面检测(2层，1,2NC)
+    [Arguments]    ${module}    ${clickxpath1}    ${clickxpath2}    ${iframe}    ${chkxpath}
+    点击元素    xpath=//*[@id="page-wrapper"]/div[1]/nav/div/a
+    点击元素    ${clickxpath1}
+    Focus    ${clickxpath2}
+    Press Key    ${clickxpath2}    \\13
+    Comment    点击元素    xpath=//*[@id="page-wrapper"]/div[1]/nav/div/a
+    切换iframe    ${iframe}
+    检测页面元素是否正确    ${chkxpath}    ${module}
+
+判断查询结果
+    [Arguments]    ${column}    ${search4}
+    ${result}=    查表是否没有记录（返回值）
+    Run Keyword If    ${result}    输出结果    没有找到匹配的记录
+    ...    ELSE    查表某列是否包含    ${column}    ${search4}
+
+检测页面元素是否正确
+    [Arguments]    ${chkxpath}    ${module}
+    ${result}=    验证元素是否等于（返回值）    ${chkxpath}    ${module}
+    Run Keyword If    '${result}'=='True'    输出结果    进入'${module}'页面成功
+    ...    ELSE    报错    进入'${module}'页面失败

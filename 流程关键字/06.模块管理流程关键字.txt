@@ -1,0 +1,17 @@
+*** Settings ***
+Resource          系统关键字.txt
+
+*** Keywords ***
+增加服务大厅链接
+    [Arguments]    ${name}    ${url}
+    输入    id=title    ${name}
+    选择下拉框by label    id=typeid    政府机构
+    点击按钮    xpath=//*[@id="form1"]/div/div[5]/div/button
+    Select Frame    id=layui-layer-iframe1
+    点击元素    xpath=//*[@id="choseIcon"]/span[1]/i    #选择第一个图标
+    点击元素    xpath=//*[@id="layui-layer1"]/div[3]/a[1]    #确定
+    输入    id=url    ${url}
+
+编辑服务大厅链接
+    [Arguments]    ${name}
+    输入    id=title    ${name}

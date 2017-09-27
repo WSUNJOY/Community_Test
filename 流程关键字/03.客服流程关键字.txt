@@ -1,0 +1,4 @@
+*** Settings ***
+Resource          系统关键字.txt
+
+*** Keywords ***

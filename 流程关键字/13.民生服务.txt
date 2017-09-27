@@ -1,0 +1,17 @@
+*** Settings ***
+Resource          系统关键字.txt
+Resource          ../流程关键字/02.检测流程关键字.txt
+
+*** Keywords ***
+服务大厅类型关键字状态查询
+    [Arguments]    ${type}    ${title}
+    ${type}=    获取单元格（返回值）    2    3
+    Select From List By Label    id=typeid    ${type}
+    查询
+    判断查询结果    3    ${type}
+    ${title}=    获取单元格（返回值）    2    2
+    输入    xpath=//*[@id="keyWord"]    ${title}
+    查询
+    判断查询结果    2    ${title}
+    清空输入框    xpath=//*[@id="keyWord"]
+    查询

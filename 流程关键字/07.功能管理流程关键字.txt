@@ -1,0 +1,111 @@
+*** Settings ***
+Resource          系统关键字.txt
+Resource          ../流程关键字/02.检测流程关键字.txt
+
+*** Keywords ***
+输入开始结束时间（返回ym）
+    [Arguments]    ${begintimeid}    ${endtimeid}
+    ${yyyy}    ${mm}    ${dd} =    Get Time    year,month,day
+    ${begintime}=    Evaluate    '${yyyy}'+'-'+'${mm}'+'-01'    #本月1日
+    ${endtime}=    Evaluate    '${yyyy}'+'-'+'${mm}'+'-'+'${dd}'    #当日
+    ${ym}=    Evaluate    '${yyyy}'+'-'+'${mm}'    #年月
+    输入    ${begintimeid}    ${begintime}
+    输入    ${endtimeid}    ${endtime}
+    Return From Keyword    ${ym}
+
+清除开始结束时间
+    [Arguments]    ${begintimeid}    ${endtimeid}
+    清空输入框    ${begintimeid}
+    清空输入框    ${endtimeid}
+
+获取列表第一条标题
+    ${title}=    获取单元格（返回值）    2    2
+    Return From Keyword    ${title}
+
+进入通知公告发布页面
+    点击元素    id=btnAdd    #发布按钮
+    检测页面元素是否正确    xpath=/html/body/div[1]/div/header/ul/li[3]    发布通知公告
+
+编辑通知公告内容
+    [Arguments]    ${NoticeTitle}    ${iframe}
+    输入    id=Notice_Title    ${NoticeTitle}    #通知公告标题
+    编辑器控件    ${NoticeTitle} 发送通知公告    #通知公告内容
+    切换iframe    ${iframe}    #通知公告框架
+
+判断是否发布成功
+    [Arguments]    ${Title}    ${State}
+    ${chk1}=    单元格是否包含（返回值）    2    2    ${Title}
+    ${chk2}=    单元格是否包含（返回值）    2    6    ${State}
+    判断if    ${chk1} and ${chk2}    添加成功    添加失败
+
+输入定时时间
+    [Arguments]    ${later}
+    @{time}=    get time    year month day hour min sec    ${later}
+    ${time}=    Evaluate    '@{time}[0]'+'-'+'@{time}[1]'+'-'+'@{time}[2]'+' '+'@{time}[3]'+':'+'@{time}[4]'+':00'
+    输入    id=Notice_PublishDateTime    ${time}    #输入定时发送日期
+
+进入代理办事办证发布页面
+    点击元素    id=btn_public    #发布按钮
+    检测页面元素是否正确    xpath=/html/body/div[1]/header/ul/li[3]    办事办证
+
+进入街道办事办证发布页面
+    点击元素    id=btn_public    #发布按钮
+    检测页面元素是否正确    xpath=/html/body/div[1]/div/header/ul/li[3]    办事指南
+
+编辑办事办证内容
+    [Arguments]    ${WorkPermit}
+    输入    id=WorkPermit_Title    ${WorkPermit}    #填写公告标题
+    输入    id=WorkPermit_Key1    ${WorkPermit}    #填写关键字
+    随机下拉框选择by index    id=WorkPermit_TypeID    1    6    #随机选择办事办证类型
+    输入    id=WorkPermit_Mechanism    ${WorkPermit}    #填写办理机构
+    编辑器控件    ${WorkPermit}
+
+通知公告状态查询
+    等页面表格加载完
+    输出结果    已发布查询
+    点击元素    id=alreadyReleased    #已发布查询
+    等页面表格加载完
+    判断查询结果    6    已发布
+    输出结果    草稿箱查询
+    点击元素    id=draftBox    #草稿箱查询
+    等页面表格加载完
+    判断查询结果    6    草稿
+    输出结果    已删除查询
+    点击元素    id=hasBeenDeleted    #已删除查询
+    等页面表格加载完
+    判断查询结果    6    已删除
+    点击元素    id=all    #全部查询
+
+街道编辑通知公告内容
+    [Arguments]    ${NoticeTitle}    ${iframe}
+    输入    id=Notice_Title    ${NoticeTitle}    #通知公告标题
+    编辑器控件    ${NoticeTitle} 街道发送通知公告    #通知公告内容
+
+选择社区通知公告发送范围
+    [Arguments]    ${locator}
+    Focus    ${locator}
+    Select Checkbox    ${locator}    #选择长兴东胡同
+
+选择街道通知公告发送范围
+    [Arguments]    ${locator}
+    Focus    ${locator}
+    Click Element    ${locator}    #选择复兴小区
+
+进入政策解读发布页面
+    点击元素    id=btnAdd    #发布按钮
+    检测页面元素是否正确    xpath=/html/body/div[1]/div/header/ul/li[3]    政策解读
+
+进入就业创业发布页面
+    点击元素    id=btnAdd    #发布按钮
+    检测页面元素是否正确    xpath=/html/body/div[1]/div/header/ul/li[3]    就业创业
+
+编辑政策解读/就业创业内容
+    [Arguments]    ${title}
+    输入    id=title    ${title}    #填写公告标题
+    输入    id=key1    ${title}    #填写关键字
+    随机下拉框选择by index    id=typeid    1    3    #随机选择类型
+    编辑器控件    ${title}
+
+进入社区办事办证发布页面
+    点击元素    id=btn_public    #发布按钮
+    检测页面元素是否正确    xpath=/html/body/div[1]/div/header/ul/li[3]    办事办证

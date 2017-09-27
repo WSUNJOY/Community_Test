@@ -1,0 +1,180 @@
+*** Settings ***
+Resource          系统关键字.txt
+Resource          ../流程关键字/02.检测流程关键字.txt
+
+*** Keywords ***
+填写店铺信息
+    [Arguments]    ${shopname}
+    上传图片new    id=shopLogo    ${CURDIR}\\Pic\\LOGO.png    #上传店铺logo
+    Input Text    id=shopName    ${shopname}    #输入店铺名称
+    Select Checkbox    id=shopType1    #选择类型店铺
+    随机下拉框选择by index    id=industryid    1    18    #行业分类-18钟
+    Input Text    id=shopperName    ${shopname}    #店主姓名
+    Input Text    id=mobile    15232324368    #电话
+    Input Text    id=shopAddress    ${shopname}    #详细地址
+    Focus    id=treeDemo_204_check
+    Click Element    id=treeDemo_204_check    #选择路北区服务范围
+    Select Checkbox    id=radWrok1    #是否接听电话-是
+    Input Text    id=minPrice    0    #多少元免配送
+    Input Text    id=userAgentFee    0    #配送费
+    Input Text    id=shopAgentFee    5    #代送服务费
+    Select Checkbox    id=supportArrivedPay1    #是否货到付款-是
+    编辑器控件    店铺介绍    #填写店铺介绍
+
+重新编辑店铺名称
+    [Arguments]    ${shopname}
+    Input Text    id=shopName    ${shopname}    #输入店铺名称
+
+填写开通店铺信息
+    上传图片new    id=img1    ${CURDIR}\\Pic\\正.png    #身份证正面
+    上传图片new    id=img2    ${CURDIR}\\Pic\\反.png    #身份证反面
+    上传图片new    id=img3    ${CURDIR}\\Pic\\手持.png    #手持身份证
+    上传图片new    id=img4    ${CURDIR}\\Pic\\营业执照.png    #营业执照
+    截图
+
+查询第一个商品
+    ${goodname}=    获取单元格（返回值）    2    2
+    输入    id=KeyWord    ${goodname}
+    判断查询结果    2    ${goodname}
+    清空输入框    id=KeyWord
+    查询
+
+填写商品信息
+    [Arguments]    ${goodname}
+    判断商品是否存在分类
+    Input Text    id=goodName    ${goodname}    #输入店铺名称
+    Select Checkbox    name=radioInline    #商品类型
+    Input Text    id=goodPrice    10    #价格
+    Input Text    id=memberPrice    5    #会员价格
+    Input Text    id=sort    2    #排序
+    上传图片new    id=shortImg    ${CURDIR}\\Pic\\缩略图.png    #商品缩略图
+    上传图片new    id=img1    ${CURDIR}\\Pic\\商品图.png    #商品图
+    编辑器控件    商品介绍    #填写商品介绍
+
+重新编辑商品信息
+    [Arguments]    ${goodname}    ${price}
+    Input Text    id=goodName    ${goodname}
+    Input Text    id=goodPrice    ${price}
+    Input Text    id=memberPrice    ${price}
+
+填写师傅信息
+    [Arguments]    ${shopname}
+    上传图片new    id=shopLogo    ${CURDIR}\\Pic\\LOGO.png    #上传店铺logo
+    Input Text    id=shopName    ${shopname}    #输入店铺名称
+    Select Checkbox    id=shopType2    #选择类型师傅
+    随机下拉框选择by index    id=industryid    1    18    #行业分类-18钟
+    Input Text    id=shopperName    ${shopname}    #店主姓名
+    Input Text    id=mobile    15232324561    #电话
+    Input Text    id=shopAddress    ${shopname}    #详细地址
+    Focus    id=treeDemo_204_check
+    Click Element    id=treeDemo_204_check    #选择路北区服务范围
+    Select Checkbox    id=radWrok1    #是否接听电话-是
+    编辑器控件    师傅服务介绍    #填写店铺介绍
+
+填写服务信息
+    [Arguments]    ${servicename}
+    Input Text    id=serverName    ${servicename}    #输入店铺名称
+    上传图片new    id=serverImg    ${CURDIR}\\Pic\\缩略图.png    #服务缩略图
+    Input Text    id=serverPrice    10    #价格
+    Select Checkbox    id=inlineRadio1    #是否接听电话-是
+    Input Text    id=serverDesc    服务介绍
+
+重新编辑服务信息
+    [Arguments]    ${servicename}    ${price}
+    Input Text    id=serverName    ${servicename}
+    Input Text    id=serverPrice    ${price}
+
+商品状态查询
+    输出结果    查询出售中
+    等页面表格加载完
+    点击元素    id=noOpen    #查询出售中
+    等页面表格加载完
+    判断查询结果    8    出售中
+    输出结果    已售完查询
+    点击元素    id=opened    #查询已售完
+    等页面表格加载完
+    判断查询结果    8    已售完
+    输出结果    已下架查询
+    点击元素    id=closeed    #查询已下架
+    等页面表格加载完
+    判断查询结果    8    已下架
+    输出结果    全部查询
+    点击元素    id=all    #查询全部
+
+商品表头排序
+    输出结果    查询出售中
+    等页面表格加载完
+    点击元素    id=noOpen    #查询出售中
+    判断查询结果    8    出售中
+    输出结果    已售完查询
+    等页面表格加载完
+    点击元素    id=opened    #查询已售完
+    判断查询结果    8    已售完
+    输出结果    已下架查询
+    等页面表格加载完
+    点击元素    id=closeed    #查询已下架
+    判断查询结果    8    已下架
+    输出结果    全部查询
+    等页面表格加载完
+    点击元素    id=all    #查询全部
+
+服务表头排序
+    点击元素    xpath=//*[@id="gridTable"]/thead/tr/th[3]/div[1]    #服务介绍
+    截图
+    点击元素    xpath=//*[@id="gridTable"]/thead/tr/th[3]/div[1]    #服务介绍
+    截图
+    点击元素    xpath=//*[@id="gridTable"]/thead/tr/th[4]/div[1]    #价格
+    截图
+    点击元素    xpath=//*[@id="gridTable"]/thead/tr/th[4]/div[1]    #价格
+    截图
+
+判断商品是否存在分类
+    ${result}=    验证元素是否可见（返回值）    xpath=//*[@id="AddType"]/div[2]/p
+    Run Keyword If    ${result}    添加商品分类
+    ...    ELSE    输出结果    存在商品分类
+
+添加商品分类
+    点击元素    xpath=//*[@id="AddType"]/div[2]/p
+    Select Frame    xpath=//*[@id="layui-layer-iframe1"]
+    点击按钮    name=addTypeBtn
+    输入    xpath=//*[@id="typeContnet"]/div/div[1]/div[1]/input    商品分类1
+    点击非页面的按钮    id=btnSave
+    Select Frame    &{代理iframe}[店铺管理]
+
+店铺状态查询
+    输出结果    未开通查询
+    等页面表格加载完
+    点击元素    id=noOpen    #查询未开通
+    等页面表格加载完
+    判断查询结果    8    未开通
+    输出结果    已开通查询
+    点击元素    id=opened    #查询已开通
+    等页面表格加载完
+    判断查询结果    8    已开通
+    输出结果    已关闭查询
+    点击元素    id=closeed    #查询已关闭
+    等页面表格加载完
+    判断查询结果    8    已关闭
+    输出结果    待审核查询
+    点击元素    id=audit    #查询待审核
+    等页面表格加载完
+    判断查询结果    8    待审核
+    输出结果    审核未通过查询
+    点击元素    id=noPass    #查询审核未通过
+    等页面表格加载完
+    判断查询结果    8    审核未通过
+    输出结果    全部查询
+    点击元素    id=all    #查询全部
+    等页面表格加载完
+
+进入商品管理页面
+    ${shopname}=    获取单元格（返回值）    2    2
+    输出结果    开始对'${shopname}'商品管理测试
+    点击非页面元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[10]/a[5]    #进入商品管理
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    商品管理
+
+进入服务管理页面
+    ${shopname}=    获取单元格（返回值）    2    2
+    输出结果    开始对${shopname}服务管理测试
+    点击非页面元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[10]/a[5]    #进入服务管理
+    检测页面元素是否正确    xpath=/html/body/div/header/ul/li[3]    服务管理
