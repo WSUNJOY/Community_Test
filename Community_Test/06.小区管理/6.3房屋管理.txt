@@ -1,0 +1,44 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/04.小区管理流程关键字.txt
+
+*** Test Cases ***
+6.3.1房屋管理页面检测
+    [Tags]    社区    页面检测    小区管理
+    导航页面检测(2层)    房屋列表    &{社区菜单}[小区管理]    &{社区菜单}[房屋管理]    &{社区iframe}[房屋管理]    xpath=/html/body/div/div/header/ul/li[3]
+
+6.3.2查看房屋详情
+    [Tags]    社区    查询    小区管理
+    ${社区}=    获取单元格（返回值）    2    1
+    ${house}=    获取单元格（返回值）    2    2
+    ${unit}=    获取单元格（返回值）    2    3
+    ${room}=    获取单元格（返回值）    2    5
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[9]/a[1]
+    截图
+    ${check1} =    验证元素是否等于（返回值）    xpath=/html/body/div/div/header/ul/li[3]    房屋详情    #元素/比较对象
+    ${check2} =    验证元素是否等于（返回值）    xpath=/html/body/div/div/div/div/div[1]/div/div[2]/form/div[2]/div    ${社区}
+    ${check3} =    验证元素是否等于（返回值）    xpath=/html/body/div/div/div/div/div[1]/div/div[2]/form/div[3]/div    ${house}
+    ${check4} =    验证元素是否等于（返回值）    xpath=/html/body/div/div/div/div/div[1]/div/div[2]/form/div[4]/div    ${unit}
+    ${check5} =    验证元素是否等于（返回值）    xpath=/html/body/div/div/div/div/div[1]/div/div[2]/form/div[1]/div    ${room}
+    Run Keyword If    ('${check1}'=='True' )and ('${check2}'=='True' )and ('${check3}'=='True')and('${check4}'=='True' )and ('${check5}'=='True')    Log To Console    页面验证通过
+    ...    ELSE    报错    页面验证失败
+    [Teardown]    关闭所有页
+
+6.3.3下拉框查询
+    [Tags]    社区    查询    小区管理
+    导航页面检测(2层)    房屋列表    &{社区菜单}[小区管理]    &{社区菜单}[房屋管理]    &{社区iframe}[房屋管理]    xpath=/html/body/div/div/header/ul/li[3]
+    选择下拉框by label    id=Room_CommunityID    ${小区}
+    选择下拉框by label    id=Room_BuildingID    ${楼栋}
+    选择下拉框by label    id=Room_UnitsID    ${单元}
+    查询
+    截图
+    查表某列是否包含    1    ${小区}
+    查表某列是否包含    2    ${楼栋}
+    查表某列是否包含    3    ${单元}
+
+6.3.4关键字查询
+    [Tags]    社区    查询    小区管理
+    输入    id=room    ${房间}    #查询关键字-关键字内容
+    查询
+    查表某列是否包含    5    ${房间}
+    [Teardown]    关闭所有页

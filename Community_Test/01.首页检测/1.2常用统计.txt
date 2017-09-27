@@ -1,0 +1,28 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+
+*** Test Cases ***
+1.2.1关注用户
+    [Tags]    社区    页面检测    首页
+    首页页面检测(1层)    关注用户    xpath=//*[@id="fansReport"]    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.2.2通知公告
+    [Tags]    社区    页面检测    首页
+    首页页面检测(1层)    通知公告    xpath=/html/body/div/div[1]/div/div[1]/div[2]/div[2]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.2.3办事办证列表
+    [Tags]    社区    页面检测    首页
+    首页页面检测(1层)    办事办证列表    xpath=/html/body/div/div[1]/div/div[1]/div[2]/div[3]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.2.4住户列表
+    [Tags]    社区    页面检测    首页
+    首页页面检测(1层)    住户列表    xpath=/html/body/div/div[1]/div/div[1]/div[2]/div[4]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.2.5小区列表
+    [Tags]    社区    页面检测    首页
+    首页页面检测(1层)    小区列表    xpath=/html/body/div/div[1]/div/div[1]/div[2]/div[5]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页

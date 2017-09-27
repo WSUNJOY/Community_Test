@@ -1,0 +1,63 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+
+*** Test Cases ***
+1.1.1个人中心
+    [Tags]    社区    页面检测    首页
+    首页页面检测(1层)    个人中心    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[1]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.1.2机构认证
+    [Tags]    社区    页面检测    首页
+    首页页面检测(1层)    机构认证    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[3]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.1.3小区列表
+    [Tags]    社区    页面检测    首页
+    首页页面检测(2层)    小区列表    xpath=//*[@id="addHouse"]/a/img    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[5]/ul/li[1]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.1.4楼栋列表
+    [Tags]    社区    页面检测    首页
+    首页页面检测(2层)    楼栋列表    xpath=//*[@id="addHouse"]/a/img    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[5]/ul/li[3]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.1.5房屋列表
+    [Tags]    社区    页面检测    首页
+    首页页面检测(2层)    房屋列表    xpath=//*[@id="addHouse"]/a/img    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[5]/ul/li[5]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.1.6住户列表
+    [Tags]    社区    页面检测    首页
+    首页页面检测(1层)    住户列表    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[7]/a/img    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.1.7自定义设置
+    [Tags]    社区    页面检测    首页
+    首页页面检测(1层)    自定义设置    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[9]/a/img    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.1.8模块设置-文章
+    [Tags]    社区    页面检测    首页
+    首页页面检测(2层)    模块设置    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[11]/a/img    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[11]/ul/li[1]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.1.9模块设置-活动
+    [Tags]    社区    页面检测    首页
+    首页页面检测(2层)    模块设置    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[11]/a/img    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[11]/ul/li[3]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.1.10模块设置-投票
+    [Tags]    社区    页面检测    首页
+    首页页面检测(2层)    模块设置    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[11]/a/img    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[11]/ul/li[5]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.1.11模块设置-黄页
+    [Tags]    社区    页面检测    首页
+    首页页面检测(2层)    模块设置    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[11]/a/img    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[11]/ul/li[7]/a    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页
+
+1.1.12通讯录列表
+    [Tags]    社区    页面检测    首页
+    首页页面检测(1层)    通讯录列表    xpath=/html/body/div/div/div/div[1]/div[1]/div/div/table/tbody/tr[1]/td[13]/a/img    xpath=/html/body/div/div/header/ul/li[3]    ${社区后台首页二维码}
+    [Teardown]    关闭所有页

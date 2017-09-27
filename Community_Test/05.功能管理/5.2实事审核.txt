@@ -1,0 +1,9 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/07.功能管理流程关键字.txt
+
+*** Test Cases ***
+5.2.1实事审核页面检测
+    [Tags]    社区    页面检测    功能管理
+    导航页面检测(2层)    实事    &{社区菜单}[功能管理]    &{社区菜单}[实事审核]    &{社区iframe}[实事审核]    xpath=/html/body/div/div/header/ul/li[3]
+    [Teardown]    关闭所有页

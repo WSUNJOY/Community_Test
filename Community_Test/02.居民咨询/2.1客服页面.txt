@@ -1,0 +1,9 @@
+*** Settings ***
+Resource          ../../流程关键字/03.客服流程关键字.txt
+Resource          ../../流程关键字/02.检测流程关键字.txt
+
+*** Test Cases ***
+2.1.1居民咨询页面检测
+    [Tags]    社区    页面检测    居民咨询
+    导航页面检测(1层)    客服    &{社区菜单}[居民咨询]    &{社区iframe}[居民咨询]    xpath=/html/body/div/div[2]/header/ul/li[2]/a
+    [Teardown]    关闭所有页

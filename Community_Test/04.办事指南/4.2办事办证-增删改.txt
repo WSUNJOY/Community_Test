@@ -1,0 +1,38 @@
+*** Settings ***
+Resource          ../../流程关键字/02.检测流程关键字.txt
+Resource          ../../流程关键字/07.功能管理流程关键字.txt
+
+*** Test Cases ***
+4.2.1添加办事办证
+    [Tags]    社区    新增    办事指南
+    导航页面检测(1层)    办事办证列表    &{社区菜单}[办事指南]    &{社区iframe}[办事指南]    xpath=/html/body/div/div/header/ul/li[3]
+    进入社区办事办证发布页面
+    ${WorkPermit}=    生成标题（返回type+ymd）    NEW
+    编辑办事办证内容    ${WorkPermit}
+    切换iframe    &{社区iframe}[办事指南]
+    点击非页面的按钮    id=btnSave    #发布
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    办事办证列表
+    判断是否发布成功    ${WorkPermit}    显示
+
+4.2.2编辑办事办证
+    [Tags]    社区    编辑    办事指南
+    切换iframe    &{社区iframe}[办事指南]
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[7]/a[2]    #编辑
+    检测页面元素是否正确    xpath=/html/body/div[1]/div/header/ul/li[3]    办事办证
+    ${WorkPermit}=    生成标题（返回type+ymd）    EDIT
+    编辑办事办证内容    ${WorkPermit}
+    切换iframe    &{社区iframe}[办事指南]
+    点击非页面的按钮    id=btnSave    #发布
+    检测页面元素是否正确    xpath=/html/body/div/div/header/ul/li[3]    办事办证列表
+    判断是否发布成功    ${WorkPermit}    显示
+    [Teardown]    关闭所有页
+
+4.2.3删除办事办证
+    [Tags]    社区    删除    办事指南
+    导航页面检测(1层)    办事办证列表    &{社区菜单}[办事指南]    &{社区iframe}[办事指南]    xpath=/html/body/div/div/header/ul/li[3]
+    ${Title}=    获取单元格（返回值）    2    2
+    点击元素    xpath=//*[@id="gridTable"]/tbody/tr[1]/td[7]/a[3]    #删除
+    点击元素    xpath=//*[@id="layui-layer1"]/div[3]/a[1]    #确定
+    检测单元格是否包含    2    2    ${Title}    报错    ${Title}删除失败    输出结果
+    ...    ${Title}删除成功
+    [Teardown]    关闭所有页
